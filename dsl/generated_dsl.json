@@ -1,0 +1,552 @@
+{
+  "system": "PIVOTA - Comprehensive Pharmacy Data Integration",
+  "version": "1.0.0",
+  "techStack": "react,springboot,postgresql",
+  "layers": [
+    "Presentation",
+    "Business",
+    "Data",
+    "Integration",
+    "Security"
+  ],
+  "services": [
+    {
+      "name": "FrontendWebApp",
+      "layer": "Presentation",
+      "type": "WebApp",
+      "framework": "React",
+      "language": "TypeScript",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/"
+      },
+      "produces": "HTML",
+      "consumes": "JSON",
+      "dependencies": [
+        "DataLineageService",
+        "DashboardService",
+        "TemplateGenerationService",
+        "UserManagementService",
+        "ETLOrchestrationService",
+        "ConnectivityService",
+        "CICDPipelineService"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "DataLineageService",
+      "layer": "Business",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/data-lineage"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "DataLineageDB"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "DashboardService",
+      "layer": "Business",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/dashboard"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "DashboardDB"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "TemplateGenerationService",
+      "layer": "Business",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/template-generation"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "TemplateDB"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "UserManagementService",
+      "layer": "Security",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/users"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "UserDB"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "ETLOrchestrationService",
+      "layer": "Integration",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/etl-orchestration"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "OrchestrationDB"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "ConnectivityService",
+      "layer": "Integration",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/connectivity"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "ConnectivityDB"
+      ],
+      "security": "OAuth2"
+    },
+    {
+      "name": "CICDPipelineService",
+      "layer": "Integration",
+      "type": "Microservice",
+      "framework": "Spring Boot",
+      "language": "Java",
+      "exposes": {
+        "protocol": "HTTP",
+        "path": "/cicd"
+      },
+      "produces": "JSON",
+      "consumes": "JSON",
+      "dependencies": [
+        "CICDDB"
+      ],
+      "security": "OAuth2"
+    }
+  ],
+  "databases": [
+    {
+      "name": "DataLineageDB",
+      "type": "PostgreSQL",
+      "owner": "DataLineageService",
+      "replicaCount": 2
+    },
+    {
+      "name": "DashboardDB",
+      "type": "PostgreSQL",
+      "owner": "DashboardService",
+      "replicaCount": 2
+    },
+    {
+      "name": "TemplateDB",
+      "type": "PostgreSQL",
+      "owner": "TemplateGenerationService",
+      "replicaCount": 2
+    },
+    {
+      "name": "UserDB",
+      "type": "PostgreSQL",
+      "owner": "UserManagementService",
+      "replicaCount": 2
+    },
+    {
+      "name": "OrchestrationDB",
+      "type": "PostgreSQL",
+      "owner": "ETLOrchestrationService",
+      "replicaCount": 2
+    },
+    {
+      "name": "ConnectivityDB",
+      "type": "PostgreSQL",
+      "owner": "ConnectivityService",
+      "replicaCount": 2
+    },
+    {
+      "name": "CICDDB",
+      "type": "PostgreSQL",
+      "owner": "CICDPipelineService",
+      "replicaCount": 2
+    }
+  ],
+  "eventStreams": [],
+  "features": [
+    {
+      "name": "Data Lineage Visualization",
+      "description": "Visualize data lineage and transformation steps within PIVOTA for transparency and compliance.",
+      "persona": "Business Analyst",
+      "acceptanceCriteria": [
+        "Users can view detailed lineage of data flows.",
+        "Transformation steps are clearly displayed.",
+        "Compliance requirements are met with audit trails."
+      ],
+      "subtasks": [
+        "Develop UI components for lineage visualization.",
+        "Implement backend APIs to fetch lineage data.",
+        "Store lineage metadata in database."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "DataLineageService",
+        "DataLineageDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "Centralized Dashboard Monitoring",
+      "description": "Monitor status and performance of data integration tasks in a centralized dashboard.",
+      "persona": "Project Manager",
+      "acceptanceCriteria": [
+        "Dashboard displays real-time status of all integration tasks.",
+        "Performance metrics and bottlenecks are visible.",
+        "Alerts for failures are generated."
+      ],
+      "subtasks": [
+        "Create dashboard UI components.",
+        "Develop backend APIs for task status and metrics.",
+        "Persist monitoring data in database."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "DashboardService",
+        "DashboardDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "Transformation Logic Template Generation",
+      "description": "Produce transformation logic templates using Python and SQL for customizable data flows.",
+      "persona": "Developer",
+      "acceptanceCriteria": [
+        "Templates for Python and SQL transformations are generated.",
+        "Templates are customizable per schema and business rules.",
+        "Templates are accessible via API."
+      ],
+      "subtasks": [
+        "Implement template generation logic in backend.",
+        "Expose APIs for template retrieval.",
+        "Store templates in database."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "TemplateGenerationService",
+        "TemplateDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "CI/CD Integration and Audit Logging",
+      "description": "Integrate with GitHub, config services, and container tools for CI/CD with full traceability and audit logs.",
+      "persona": "DevSecOps Engineer",
+      "acceptanceCriteria": [
+        "CI/CD pipelines are integrated with GitHub.",
+        "Audit logs capture all deployment and config changes.",
+        "Containerization tools are supported."
+      ],
+      "subtasks": [
+        "Develop backend services for CI/CD orchestration.",
+        "Implement audit logging mechanisms.",
+        "Integrate with containerization and config services."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "CICDPipelineService",
+        "CICDDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "User Role and Access Management",
+      "description": "Manage user roles and access controls to secure ETL workflows and sensitive data.",
+      "persona": "Admin",
+      "acceptanceCriteria": [
+        "Admins can assign and modify user roles.",
+        "Access controls restrict unauthorized modifications.",
+        "Sensitive patient data is protected."
+      ],
+      "subtasks": [
+        "Create user management UI components.",
+        "Implement backend APIs for role and access control.",
+        "Store user and role data securely."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "UserManagementService",
+        "UserDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "Enterprise Data Source Connectivity",
+      "description": "Configure and orchestrate connections between AWS Redshift, RDS, and unstructured data sources.",
+      "persona": "Solution Architect",
+      "acceptanceCriteria": [
+        "Connections to AWS Redshift and RDS are configurable.",
+        "Unstructured data sources are supported.",
+        "Data extraction and loading is seamless."
+      ],
+      "subtasks": [
+        "Develop backend connectivity APIs.",
+        "Persist connection configurations.",
+        "Enable orchestration of data flows."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "ConnectivityService",
+        "ConnectivityDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "Automated ETL Pipeline Generation",
+      "description": "Automatically generate ETL pipelines from high-level requirements to accelerate data integration.",
+      "persona": "Data Engineer",
+      "acceptanceCriteria": [
+        "ETL pipelines are generated without manual coding.",
+        "Pipelines handle disparate healthcare data sources.",
+        "Generated pipelines are deployable."
+      ],
+      "subtasks": [
+        "Implement pipeline generation logic.",
+        "Expose APIs for pipeline creation.",
+        "Store pipeline metadata."
+      ],
+      "services": [
+        "FrontendWebApp",
+        "ETLOrchestrationService",
+        "OrchestrationDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "ETL Execution",
+      "description": "Execute ETL pipelines reliably and monitor execution status.",
+      "persona": "Data Engineer",
+      "acceptanceCriteria": [
+        "ETL jobs execute as scheduled or triggered.",
+        "Execution status and logs are available.",
+        "Failures trigger alerts."
+      ],
+      "subtasks": [
+        "Build ETL execution engine.",
+        "Monitor and log execution details.",
+        "Integrate with dashboard for status."
+      ],
+      "services": [
+        "ETLOrchestrationService",
+        "OrchestrationDB",
+        "DashboardService",
+        "DashboardDB"
+      ],
+      "deps": [
+        "Automated ETL Pipeline Generation",
+        "Centralized Dashboard Monitoring"
+      ]
+    },
+    {
+      "name": "Data Source Connectivity",
+      "description": "Establish and manage connectivity to various data sources for ingestion.",
+      "persona": "Data Engineer",
+      "acceptanceCriteria": [
+        "Connections to all required data sources are configured.",
+        "Connectivity issues are detected and reported.",
+        "Supports structured and unstructured sources."
+      ],
+      "subtasks": [
+        "Develop connectivity management APIs.",
+        "Monitor connection health.",
+        "Store connectivity metadata."
+      ],
+      "services": [
+        "ConnectivityService",
+        "ConnectivityDB"
+      ],
+      "deps": []
+    },
+    {
+      "name": "ETL/CI/CD Pipelines",
+      "description": "Provide pipelines for ETL and CI/CD to ensure continuous delivery and integration.",
+      "persona": "DevSecOps Engineer",
+      "acceptanceCriteria": [
+        "ETL pipelines integrate with CI/CD workflows.",
+        "Pipelines support versioning and rollback.",
+        "Full traceability and audit logs are maintained."
+      ],
+      "subtasks": [
+        "Integrate ETL pipelines with CI/CD backend.",
+        "Implement version control and rollback features.",
+        "Maintain audit logs for all pipeline actions."
+      ],
+      "services": [
+        "ETLOrchestrationService",
+        "CICDPipelineService",
+        "OrchestrationDB",
+        "CICDDB"
+      ],
+      "deps": [
+        "Automated ETL Pipeline Generation",
+        "CI/CD Integration and Audit Logging"
+      ]
+    }
+  ],
+  "nfrs": [
+    {
+      "name": "Performance",
+      "aspect": "Performance",
+      "target": "p95 latency < 300ms",
+      "appliesTo": [
+        "DataLineageService",
+        "DashboardService",
+        "TemplateGenerationService",
+        "UserManagementService",
+        "ETLOrchestrationService",
+        "ConnectivityService",
+        "CICDPipelineService"
+      ]
+    },
+    {
+      "name": "Availability",
+      "aspect": "Availability",
+      "target": "99.9% uptime",
+      "appliesTo": [
+        "DataLineageService",
+        "DashboardService",
+        "TemplateGenerationService",
+        "UserManagementService",
+        "ETLOrchestrationService",
+        "ConnectivityService",
+        "CICDPipelineService"
+      ]
+    },
+    {
+      "name": "Scalability",
+      "aspect": "Scalability",
+      "target": "Support up to 10,000 concurrent users",
+      "appliesTo": [
+        "FrontendWebApp",
+        "DataLineageService",
+        "DashboardService",
+        "TemplateGenerationService",
+        "UserManagementService",
+        "ETLOrchestrationService",
+        "ConnectivityService",
+        "CICDPipelineService"
+      ]
+    },
+    {
+      "name": "Security",
+      "aspect": "Security",
+      "target": "All data encrypted at rest and in transit",
+      "appliesTo": [
+        "All services"
+      ]
+    }
+  ],
+  "securityPolicies": [
+    {
+      "name": "OAuth2 Security",
+      "auth": "OAuth2",
+      "encryption": "AES-256",
+      "network": "HTTPS",
+      "compliance": "PCI-DSS"
+    }
+  ],
+  "deployments": [
+    {
+      "environment": "Prod",
+      "services": [
+        {
+          "name": "FrontendWebApp",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "DataLineageService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "DashboardService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "TemplateGenerationService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "UserManagementService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "ETLOrchestrationService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "ConnectivityService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        },
+        {
+          "name": "CICDPipelineService",
+          "platform": "AWS",
+          "location": "us-east-1"
+        }
+      ],
+      "infra": {
+        "tool": "Terraform",
+        "path": "infra/prod/main.tf"
+      }
+    }
+  ],
+  "devSetup": {
+    "installCommands": [
+      "npm install",
+      "mvn install"
+    ],
+    "envVariables": {
+      "DB_HOST": "localhost",
+      "DB_USER": "postgres",
+      "DB_PASS": "password"
+    },
+    "buildScripts": [
+      "npm run build",
+      "mvn package"
+    ],
+    "runCommands": [
+      "npm start",
+      "java -jar target/app.jar"
+    ]
+  }
+}
